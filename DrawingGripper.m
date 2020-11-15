@@ -37,9 +37,9 @@ M_x = JointCoord(1,13);    N_x = JointCoord(1,14);
 M_y = JointCoord(2,13);    N_y = JointCoord(2,14);  
 
 grid on
-hold on
 
 plot([0, A_x],[0, A_y],'-o','LineWidth',4);
+hold on
 plot([B_x,F_x],[B_y,F_y], '-o','LineWidth',4);
 plot([B_x,C_x],[B_y,C_y], '-o','LineWidth',4);
 plot([F_x,E_x],[F_y,E_y], '-o','LineWidth',4);

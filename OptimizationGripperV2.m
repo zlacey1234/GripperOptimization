@@ -38,7 +38,7 @@ xVelocityOfApproach = -1; % (mm/s) negative since it's moving to the left
 F_M = zeros(2,SizeVaryingMat);
 
 for j = 1:SizeVaryingMat
-%     figure(j)
+     figure(j)
     
     % Point P
     Pinit = [x_Di + L16*cos(theta16), y_D + L16*sin(theta16)];
@@ -61,10 +61,10 @@ for j = 1:SizeVaryingMat
         x_D = x_Di;
  
 %% Supressing the MATLAB plotting simulation 
-%         grid on
-%         pgon = polyshape(Rockx + Pinit(1) + initialDistXFromMiddleToe + polyx, Rocky)
-%         plot(pgon,'FaceColor','yellow','FaceAlpha',0.85)
-%         hold on
+%        pgon = polyshape(Rockx + Pinit(1) + initialDistXFromMiddleToe + polyx, Rocky)
+%        plot(pgon,'FaceColor','yellow','FaceAlpha',0.85)
+%        hold on
+
         P = Pinit;
         % If statement: P(1) > Rockx + P(1) + initialDistXFromMiddleToe + polyx
         % If middle toe is making contact with the object, then we update
@@ -83,12 +83,8 @@ for j = 1:SizeVaryingMat
         M_x(i) = Joints(1,13);   M_y(i) = Joints(2,13);
         N_x(i) = Joints(1,14);   N_y(i) = Joints(2,14);
 
-%         DrawingGripper(Joints, P);
+        DrawingGripper(Joints, P);
         
-%         set(gca,'Color','k')
-%         hold off
-%         axis equal
-%         drawnow;
 
         % if the gripper toe makes contact with the object
         if inpolygon(M_x(i),M_y(i),Rockx + Pinit(1) + initialDistXFromMiddleToe + polyx, Rocky) || inpolygon(N_x(i),N_y(i),Rockx + Pinit(1) + initialDistXFromMiddleToe + polyx, Rocky)
