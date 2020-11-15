@@ -76,8 +76,8 @@ x_M = PointM(1);   y_M = PointM(2);
 x_N = PointN(1);   y_N = PointN(2);
 
 %% Calculating theta11, theta12, given x_M and y_M
-r_IM = sqrt((x_M - L_act)^2 + (y_M - L0/2)^2)
-theta11 = acos((r_IM^2 + L11^2 - (L12 + L14)^2)/(2*r_IM*L11)) + atan2(y_M - L0/2, x_M - L_act)
+r_IM = sqrt((x_M - L_act)^2 + (y_M - L0/2)^2);
+theta11 = acos((r_IM^2 + L11^2 - (L12 + L14)^2)/(2*r_IM*L11)) + atan2(y_M - L0/2, x_M - L_act);
 theta12 = theta11  +  acos((L11^2 + (L12 + L14)^2 - r_IM^2)/(2*L11*(L12+L14)))  -  pi;
 
 %% Calculating theta8, theta9, given x_N and y_N
