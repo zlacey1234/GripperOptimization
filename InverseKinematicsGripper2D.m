@@ -166,11 +166,15 @@ P_M = [x_M;...
 P_N = [x_N;...
        y_N];
    
+% Point D   
+P_D2 = [(L1 + L6*cos(theta6) + L5*cos(theta5));...
+       (-L2 + L6*sin(theta6) + L5*sin(theta5))];
+   
 %% Packing the Theta and Joint Position Parameters  
 Theta = [theta3     theta4     theta5     theta6     theta8     theta9 ...
          theta10    theta11    theta12    theta13    theta14    theta15];
 
 JointCoord = [P_A    P_B    P_C    P_D    P_E    P_F    P_G ...   
-              P_H    P_I    P_J    P_K    P_L    P_M    P_N];
+              P_H    P_I    P_J    P_K    P_L    P_M    P_N     P_D2];
 
 end
