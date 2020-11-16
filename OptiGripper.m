@@ -3,21 +3,18 @@ clear all;
 clc;
 
 import casadi.*
-
-
 opti = casadi.Opti();
 
 
 %% Create the Gripper (Initially at Home Position)
-L_act = 0;       L1 = opti.variable();
+L_act = 0;     
+L0 = 0;     
+
+L1 = opti.variable();
 L2 = opti.variable();
-
-%L16 = opti.variable();
-%theta16 = 0;
-
-L0 = 0;      
 L3 = opti.variable();     L4 = opti.variable();     L11 = opti.variable();   
 L12 = opti.variable();    L13 = opti.variable();    L14 = opti.variable();
+
 
 L5 = L4;    L6 = L3;    L7 = L2;
 L10 = L13;  L9 = L12;   L8 = L11;
@@ -35,8 +32,8 @@ PointN = opti.variable(1,2);
 % cube object y=+/-12
 rock_y=12;
 opti.subject_to(0<PointM(1));
-opti.subject_to(0<PointN(1));
-%opti.subject_to(PointM(1) == PointN(1));
+%opti.subject_to(0<PointN(1));
+opti.subject_to(PointM(1) == PointN(1));
 opti.subject_to(PointM(2)==rock_y);
 opti.subject_to(PointN(2)==-rock_y);
 % init 
@@ -46,6 +43,7 @@ opti.set_initial(PointN,[12,-rock_y]);
 %% Contact points (y=2x)
 %opti.subject_to(PointM(2)==2*PointM(1));
 %opti.subject_to(PointN(2)==-2*PointN(1));
+
 %opti.set_initial(PointM,[2,4]);
 %opti.set_initial(PointN,[2,-4]);
 
@@ -63,10 +61,12 @@ opti.subject_to(pi/8 < Theta(8) < pi/2);
 %% Point D constraint
 D_x = JointCoord(1,4);
 D_y = JointCoord(2,4);
-%opti.subject_to(D_y == 0);
+%strict D_y constraint
+opti.subject_to(D_y == 5);
 
+%Point D boundary condition
 %opti.subject_to(L1 < D_x);
-opti.subject_to(-L2 < D_y < L2);
+%opti.subject_to(-L2 < D_y < L2);
 
  %% Reaction force constraint
  F_actuator_total = 20; % (Newtons)
