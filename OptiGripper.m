@@ -63,10 +63,16 @@ opti.subject_to(pi/8 < Theta(8) < pi/2);
 %% Point D constraint
 D_x = JointCoord(1,4);
 D_y = JointCoord(2,4);
+
+D_x2 = JointCoord(1,15);
+D_y2 = JointCoord(2,15);
+
+opti.subject_to(D_x == D_x2);
+opti.subject_to(D_y == D_y2);
 %opti.subject_to(D_y == 0);
 
 %opti.subject_to(L1 < D_x);
-opti.subject_to(-L2 < D_y < L2);
+% opti.subject_to(-L2 < D_y < L2);
 
  %% Reaction force constraint
  F_actuator_total = 20; % (Newtons)
