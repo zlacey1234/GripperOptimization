@@ -75,6 +75,7 @@ opti.subject_to(D_y == D_y2);
 opti.subject_to(-L2 < D_y < L2);
 
 
+
  %% Reaction force constraint
  F_actuator_total = 20; % (Newtons)
  Actuator_joint_num = 2; % We are assuming the pin joints are at the same point for now
@@ -98,8 +99,8 @@ end
 %opti.subject_to(0<=F_N(1));
 
 
- %% link length constraints (all positive and not too long) 
- minL = 3; maxL = 21;
+%% link length constraints (all positive and not too long) 
+minL = 3; maxL = 21;
 opti.subject_to(minL < L1 < maxL); opti.subject_to(minL < L2 < maxL); opti.subject_to(minL < L3 < maxL);
 opti.subject_to(minL < L4 < maxL); opti.subject_to(minL < L11 < maxL); opti.subject_to(minL < L12 < maxL);
 opti.subject_to(minL < L13 < maxL); opti.subject_to(minL < L14 < maxL); 
