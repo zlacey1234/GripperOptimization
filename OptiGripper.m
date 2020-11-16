@@ -61,10 +61,6 @@ opti.subject_to(pi/8 < Theta(8) < pi/2);
 %% Point D constraint
 D_x = JointCoord(1,4);
 D_y = JointCoord(2,4);
-<<<<<<< HEAD
-%strict D_y constraint
-opti.subject_to(D_y == 5);
-=======
 
 D_x2 = JointCoord(1,15);
 D_y2 = JointCoord(2,15);
@@ -72,15 +68,10 @@ D_y2 = JointCoord(2,15);
 opti.subject_to(D_x == D_x2);
 opti.subject_to(D_y == D_y2);
 %opti.subject_to(D_y == 0);
->>>>>>> 31038fb79527c3e247dc6294cb24eceda8ac21d6
 
 %Point D boundary condition
 %opti.subject_to(L1 < D_x);
-<<<<<<< HEAD
-%opti.subject_to(-L2 < D_y < L2);
-=======
 % opti.subject_to(-L2 < D_y < L2);
->>>>>>> 31038fb79527c3e247dc6294cb24eceda8ac21d6
 
  %% Reaction force constraint
  F_actuator_total = 20; % (Newtons)
@@ -105,8 +96,8 @@ end
 %opti.subject_to(0<=F_N(1));
 
 
- %% link length constraints (all positive and not too long) 
- minL = 3; maxL = 21;
+%% link length constraints (all positive and not too long) 
+minL = 3; maxL = 21;
 opti.subject_to(minL < L1 < maxL); opti.subject_to(minL < L2 < maxL); opti.subject_to(minL < L3 < maxL);
 opti.subject_to(minL < L4 < maxL); opti.subject_to(minL < L11 < maxL); opti.subject_to(minL < L12 < maxL);
 opti.subject_to(minL < L13 < maxL); opti.subject_to(minL < L14 < maxL); 
