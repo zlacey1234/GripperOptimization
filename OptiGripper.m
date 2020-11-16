@@ -32,13 +32,13 @@ PointN = opti.variable(1,2);
 % cube object y=+/-12
 rock_y=12;
 opti.subject_to(0<PointM(1));
-%opti.subject_to(0<PointN(1));
-opti.subject_to(PointM(1) == PointN(1));
+opti.subject_to(0<PointN(1));
+
 opti.subject_to(PointM(2)==rock_y);
-opti.subject_to(PointN(2)==-rock_y);
+opti.subject_to(PointN(2)==-6);
 % init 
-opti.set_initial(PointM,[12,rock_y]);
-opti.set_initial(PointN,[12,-rock_y]);
+opti.set_initial(PointM,[10,rock_y]);
+opti.set_initial(PointN,[10,-6]);
 
 %% Contact points (y=2x)
 %opti.subject_to(PointM(2)==2*PointM(1));
@@ -61,26 +61,19 @@ opti.subject_to(pi/8 < Theta(8) < pi/2);
 %% Point D constraint
 D_x = JointCoord(1,4);
 D_y = JointCoord(2,4);
-<<<<<<< HEAD
-%strict D_y constraint
-opti.subject_to(D_y == 5);
-=======
 
+%strict D_y constraint
 D_x2 = JointCoord(1,15);
 D_y2 = JointCoord(2,15);
 
 opti.subject_to(D_x == D_x2);
 opti.subject_to(D_y == D_y2);
-%opti.subject_to(D_y == 0);
->>>>>>> 31038fb79527c3e247dc6294cb24eceda8ac21d6
+
 
 %Point D boundary condition
 %opti.subject_to(L1 < D_x);
-<<<<<<< HEAD
-%opti.subject_to(-L2 < D_y < L2);
-=======
-% opti.subject_to(-L2 < D_y < L2);
->>>>>>> 31038fb79527c3e247dc6294cb24eceda8ac21d6
+opti.subject_to(-L2 < D_y < L2);
+
 
  %% Reaction force constraint
  F_actuator_total = 20; % (Newtons)
@@ -90,7 +83,7 @@ opti.subject_to(D_y == D_y2);
  
 if(true)
     %constraint gripping force by gear ratio
-    min_ratio = 5; max_ratio = 10;
+    min_ratio = 8; max_ratio = 20;
     opti.subject_to(min_ratio < (F_M(2)-F_N(2))/F_actuator_total < max_ratio);
 else
     %constraint gripping force by newton
@@ -128,11 +121,13 @@ opti.set_initial(L14,5);
 %% 
 
 %% Objective function
-%opti.minimize(PointM(1)+PointN(1));
+%opti.minimize(w1*(PointM(1)-PointN(1))^2 + w2*(1/(F_M(2)-F_N(2))));
+
 %opti.minimize(1/(F_M(2)-F_N(2)))
 %opti.minimize((F_M(2)-F_N(2))/F_actuator_total)
-opti.minimize(L12+L15);
-%opti.minimize(D_y^2)
+%opti.minimize(L11);
+%opti.minimize(D_y^2);
+
  
 %run solver 
 opti.solver('ipopt');
@@ -153,6 +148,4 @@ sol.value(F_M)
 sol.value(F_N)
 D_x = JointCoord_sol(1,4)
 D_y = JointCoord_sol(2,4)
- 
-        
-     
+
