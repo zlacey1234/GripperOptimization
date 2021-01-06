@@ -88,7 +88,7 @@ Y = [X1(:) X2(:)]';
 rho = (exp(SIGMA(1,2)^2)-1)/sqrt((exp(SIGMA(1,1)^2)-1)*(exp(SIGMA(2,2)^2)-1));
 %rho = (exp(SIGMA(1,2))-1)/sqrt((exp(SIGMA(1,1)^2-1))*(exp(SIGMA(2,2)^2-1)));
 %rho = SIGMA(1,2)^2/sqrt(SIGMA(1,1)*SIGMA(2,2));
-
+%rho = 0;
 
 q = 1/(1-rho^2)*( ((log(Y(1,:))-MU(1))/SIGMA(1,1)).^2 - 2*rho*  ((log(Y(1,:))-MU(1))/SIGMA(1,1)) .* ((log(Y(2,:))-MU(2))/SIGMA(2,2)) +  ((log(Y(2,:))-MU(2))/SIGMA(2,2)).^2   );
 
@@ -99,4 +99,4 @@ LOGNORMAL = reshape(LOGNORMAL,length(x_W),length(x_H));
 surf(x_H,x_W,LOGNORMAL)
 
 hold on
-histo = histogram2(A(:,1),A(:,2),'Normalization','pdf')
+%histo = histogram2(A(:,1),A(:,2),'Normalization','pdf')

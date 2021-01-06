@@ -31,12 +31,14 @@ PointN = opti.variable(1,2);
 opti.subject_to(0<PointM(1));
 opti.subject_to(0<PointN(1));
 
-if(false)
+if(true)
     % cube object y=+/-12
-    rock_y=6;
+    rock_y=4;
+    
+    offset = 1
 
-    opti.subject_to(PointM(2)==rock_y);
-    opti.subject_to(PointN(2)==-rock_y);
+    opti.subject_to(PointM(2)==rock_y+offset);
+    opti.subject_to(PointN(2)==-rock_y+offset);
     % init 
     opti.set_initial(PointM,[10,rock_y]);
     opti.set_initial(PointN,[10,-rock_y]);
@@ -89,7 +91,7 @@ opti.subject_to(-L2 < D_y < L2);
  
 if(true)
     %constraint gripping force by gear ratio
-    min_ratio = 8; max_ratio = 20;
+    min_ratio = 3; max_ratio = 20;
     opti.subject_to(min_ratio < (F_M(2)-F_N(2))/F_actuator_total < max_ratio);
 else
     %constraint gripping force by newton
