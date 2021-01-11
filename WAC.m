@@ -22,7 +22,7 @@ L15 = L14;
 CurrentLinks = [L1 L2 L3 L4 L5 L6 L7 L8 L9 L10 L11 L12 L13 L14 L15]';
 
 %% width interporation
-width_sample = 8; offset = 2;
+width_sample = 8; offset = 10;
 width_min = opti.variable(); width_max = opti.variable();
 width = linspace(width_min,width_max,width_sample);
 opti.subject_to(0 < width_min < width_max);
@@ -103,14 +103,16 @@ opti.set_initial(L1,amp*65.5);
 opti.set_initial(L2,amp*80);
 opti.set_initial(L3,amp*80);
 opti.set_initial(L4,amp*80);
-opti.set_initial(L11,amp*200);
-opti.set_initial(L12,amp*130);
+opti.set_initial(L11,amp*140);
+opti.set_initial(L12,amp*120);
 opti.set_initial(L13,amp*100);
 opti.set_initial(L14,amp*50);
 
+
+
 %% link length constraints (all positive and not too long)
-minL = 0; maxL = 200;
-opti.subject_to(minL < L1 < maxL); opti.subject_to(minL < L2 < maxL); opti.subject_to(minL < L3 < maxL);
+minL = 0; maxL = 150;
+opti.subject_to(40 < L1 < maxL); opti.subject_to(minL < L2 < maxL); opti.subject_to(minL < L3 < maxL);
 opti.subject_to(minL < L4 < maxL); opti.subject_to(minL < L11 < maxL); opti.subject_to(minL < L12 < maxL);
 opti.subject_to(minL < L13 < maxL); opti.subject_to(minL < L14 < maxL);
 
