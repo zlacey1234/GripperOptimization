@@ -22,7 +22,7 @@ L15 = L14;
 CurrentLinks = [L1 L2 L3 L4 L5 L6 L7 L8 L9 L10 L11 L12 L13 L14 L15]';
 
 %% width interporation
-width_sample = 8; offset = 10;
+width_sample =11; offset = 10;
 width_min = opti.variable(); width_max = opti.variable();
 width = linspace(width_min,width_max,width_sample);
 opti.subject_to(0 < width_min < width_max);
@@ -33,9 +33,9 @@ PointM_x_init = linspace(123,133.5,width_sample);
 PointN_x_init = linspace(132,113,width_sample);
 
 %% CDF sampling
-pdf_sample_x = 5;
-pdf_sample_y = 5;
-height_max = 50;
+pdf_sample_x = 20;
+pdf_sample_y = 10;
+height_max = 100;
 
 %% Actuator setting
 
@@ -52,7 +52,7 @@ opti.set_initial(PointN(1,:), PointN_x_init);
 
 %% For loop variables
 w = opti.variable(1,width_sample);
-rho_sum = opti.variable(1,width_sample-1);
+rho_sum = opti.variable(1,width_sample);
 
 %% calculate rho and weight
 for k = 1 : width_sample
@@ -66,7 +66,7 @@ for k = 1 : width_sample
     %reaction force
     [F_M, F_N] = StaticEquilibrium(F_actuator_total, Actuator_joint_num, CurrentLinks, Theta_temp);
     %weight calculation
-    min_ratio = 6; min_sf = 1.5; peak = 5; alpha = 1/10;
+    min_ratio = 10; min_sf = 1.5; peak = 5; alpha = 1/10;
     w(k) = weightSF((F_M(2)-F_N(2)),min_ratio,min_sf,peak,alpha);
     
     %calculate pdf sum thru sampling
@@ -86,15 +86,18 @@ for k = 1 : width_sample
             end
         end
         rho_sum(k) = sum(rho_sum_temp);
-        
+    
+    else
+        rho_sum(k) = sum(rho_sum_temp(pdf_sample_x*pdf_sample_y-pdf_sample_y+1:end));
+        rho_sum(k-1) = rho_sum(k-1) - sum(rho_sum_temp(pdf_sample_x*pdf_sample_y-pdf_sample_y+1:end));
     end
     
 end
 
 
 %% calculate CDF
-CDF=sum(w(1:width_sample-1).*rho_sum);
-opti.minimize(1-CDF)
+CDF=sum(w(1:width_sample).*rho_sum);
+opti.minimize(2-CDF)
 
 %% initial guess for linksh
 %amplification
@@ -111,12 +114,12 @@ opti.set_initial(L14,amp*50);
 
 
 %% link length constraints (all positive and not too long)
-minL = 0; maxL = 150;
+minL = 10; maxL = 100;
 opti.subject_to(40 < L1 < maxL); opti.subject_to(minL < L2 < maxL); opti.subject_to(minL < L3 < maxL);
 opti.subject_to(minL < L4 < maxL); opti.subject_to(minL < L11 < maxL); opti.subject_to(minL < L12 < maxL);
 opti.subject_to(minL < L13 < maxL); opti.subject_to(minL < L14 < maxL);
 
-opti.set_initial(sol_save.value_variables());
+%opti.set_initial(sol_save.value_variables());
 
 opti.solver('ipopt');
 sol = opti.solve();
