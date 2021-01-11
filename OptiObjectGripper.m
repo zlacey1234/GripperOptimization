@@ -31,7 +31,7 @@ PointN = opti.variable(1,2);
 opti.subject_to(0<PointM(1));
 opti.subject_to(0<PointN(1));
 
-if(true)
+if(false)
     % cube object y=+/-12
     rock_y=4;
     

@@ -191,8 +191,8 @@ b1 = 2*A_d(2) - a1*A_d(1);
 a2 = (2*D_d(2)-2*C_d(2))/(D_d(1)-C_d(1));
 b2 = 2*D_d(2) - a2*D_d(1);
 
-N_line = 30;
-N_x = 30;
+N_line = 5;
+N_x = 5;
 
 a_v = linspace(a1,a2,N_line);
 b_v = linspace(b1,b2,N_line);

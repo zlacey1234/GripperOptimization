@@ -14,7 +14,7 @@ function w = weightSF(ratio, min_ratio, min_sf,peak,alpha)
 %       A function of safety factor, which is a function of inverse
 %       kinematics
     sf = ratio./min_ratio;
-    w = -alpha./((sf-min_sf)) - (alpha.*(sf-peak)).^2 + 1;
+    w = -alpha./exp((sf-min_sf)) - (alpha.*(sf-peak)).^2 + 1;
     
 
 end
