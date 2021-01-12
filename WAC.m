@@ -22,7 +22,7 @@ L15 = L14;
 CurrentLinks = [L1 L2 L3 L4 L5 L6 L7 L8 L9 L10 L11 L12 L13 L14 L15]';
 
 %% width interporation
-width_sample =11; offset = 10;
+width_sample =11; offset = 20;
 width_min = opti.variable(); width_max = opti.variable();
 width = linspace(width_min,width_max,width_sample);
 opti.subject_to(0 < width_min < width_max);
@@ -66,7 +66,7 @@ for k = 1 : width_sample
     %reaction force
     [F_M, F_N] = StaticEquilibrium(F_actuator_total, Actuator_joint_num, CurrentLinks, Theta_temp);
     %weight calculation
-    min_ratio = 10; min_sf = 1.5; peak = 5; alpha = 1/10;
+    min_ratio = 10; min_sf = 1.5; peak = 5; alpha = 1/20;
     w(k) = weightSF((F_M(2)-F_N(2)),min_ratio,min_sf,peak,alpha);
     
     %calculate pdf sum thru sampling
