@@ -1,6 +1,4 @@
-close all;
-clear all;
-clc;
+function [CurrentLinks_sol,width_sol,CDF_sol,PointM_sol,PointN_sol,eval_sol] = WAC_func(L0,offset,min_ratio,width_sample,pdf_sample,guess_CurrentLink,guess_PointM_x,guess_PointN_x,limit_MN)
 
 import casadi.*
 opti = casadi.Opti();
@@ -8,8 +6,6 @@ opti = casadi.Opti();
 
 %% Create the Gripper (Initially at Home Position)
 L_act = 0;
-L0 = 40;
-
 L1 = opti.variable();   L2 = opti.variable();   L3 = opti.variable();
 L4 = opti.variable();   L11 = opti.variable();  L12 = opti.variable();
 L13 = opti.variable();  L14 = opti.variable();
@@ -21,42 +17,23 @@ L15 = L14;
 
 CurrentLinks = [L1 L2 L3 L4 L5 L6 L7 L8 L9 L10 L11 L12 L13 L14 L15]';
 
-%%
-%g_max = 700;%g
-%PLA_density = 0.00125;%g/mm^3 
-%link_height = 5;%mm
-%link_width = 12;%mm
-%g_spine = 20; g_fastener = 30; g_servo = 82; g_leg =100;
-%g_link = sum(PLA_density*link_height*link_width*CurrentLinks);
-%g_subtotal = 2*g_spine + g_fastener + g_link;
-%g_total = 2*g_subtotal + g_leg + g_servo;
-
-%w_g = sqrt(g_max/g_total+1)/1.7321; %SF of 2 = weight 1
-
-%opti.subject_to(0<g_max/g_total);
-
-%% contact point constraints
-
-
-%
 %% width interporation
-width_sample =10; offset = 20;
 width_min = opti.variable(); width_max = opti.variable();
 width = linspace(width_min,width_max,width_sample);
 opti.subject_to(0 < width_min < width_max);
 
 opti.set_initial(width_min,11); opti.set_initial(width_max,60);
 
-PointM_x_init = linspace(123,133.5,width_sample);
-PointN_x_init = linspace(132,113,width_sample);
+PointM_x_init = linspace(guess_PointM_x(1),guess_PointM_x(2),width_sample);
+PointN_x_init = linspace(guess_PointN_x(1),guess_PointN_x(2),width_sample);
 
 %% CDF sampling
-pdf_sample_x = 10;
-pdf_sample_y = 10;
+pdf_sample_x = pdf_sample(1);
+pdf_sample_y = pdf_sample(2);
 height_max = 100;
 
 %% Actuator setting
-min_ratio = 10; min_sf = 1.5; peak = 5; alpha = 1/20;
+min_sf = 1.5; peak = 5; alpha = 1/20;
 
 F_actuator_total = 1; % (Newtons)
 Actuator_joint_num = 2; % We are assuming the pin joints are at the same point for now
@@ -69,8 +46,9 @@ PointN = [opti.variable(1,width_sample);-width'/2 + offset];
 opti.set_initial(PointM(1,:), PointM_x_init);
 opti.set_initial(PointN(1,:), PointN_x_init);
 
-%opti.subject_to(0<PointM(1,:) < 150);
-%opti.subject_to(0<PointN(1,:) < 150);
+opti.subject_to(0<PointM(1,:) < limit_MN);
+opti.subject_to(0<PointN(1,:) < limit_MN);
+
 
 %% For loop variables
 w = opti.variable(1,width_sample);
@@ -82,9 +60,9 @@ for k = 1 : width_sample
     %solve inverse kinematics
     [Theta_temp, JointCoord_temp] = InverseKinematicsGripper2D(L_act, L0, CurrentLinks, PointM(:,k), PointN(:,k));
     %theta angle constraints (avoid singularity)
-    opti.subject_to(-pi/4 < Theta_temp(1) < pi/4); opti.subject_to(pi/2 < Theta_temp(3)); 
-    opti.subject_to(pi/8 < Theta_temp(8) < 3*pi/4); 
-    %opti.subject_to(-pi/2 < Theta_temp(6) < pi/2); 
+    opti.subject_to(-pi/4 < Theta_temp(1) < pi/4); opti.subject_to(pi/2 < Theta_temp(3));
+    %opti.subject_to(pi/8 < Theta_temp(8) < 3*pi/4);
+    %opti.subject_to(-pi/2 < Theta_temp(6) < pi/2);
     %opti.subject_to(-pi/2 < Theta_temp(10) < pi/2);
     %loop constraint (D_upper == D_lower)
     opti.subject_to(JointCoord_temp(1:2,15)-0.1 <= JointCoord_temp(1:2,4) <= JointCoord_temp(1:2,15)+0.1);
@@ -114,7 +92,7 @@ for k = 1 : width_sample
             end
         end
         rho_sum(k) = sum(rho_sum_temp);
-    
+        
     else
         rho_sum(k) = sum(rho_sum_temp(pdf_sample_x*pdf_sample_y-pdf_sample_y+1:end));
         rho_sum(k-1) = rho_sum(k-1) - sum(rho_sum_temp(pdf_sample_x*pdf_sample_y-pdf_sample_y+1:end));
@@ -125,63 +103,65 @@ end
 
 %% calculate CDF
 CDF=sum(w.*rho_sum);
-%opti.minimize(if_else((1-CDF)~=(1-CDF),1,(1-CDF)))
 opti.minimize(1-CDF);
 
 %% initial guess for linksh
 %amplification
-amp = 0.5;
-opti.set_initial(L1,amp*65.5);%65.5
-opti.set_initial(L2,amp*80);
-opti.set_initial(L3,amp*80);
-opti.set_initial(L4,amp*80);
-opti.set_initial(L11,amp*140);
-opti.set_initial(L12,amp*120);
-opti.set_initial(L13,amp*100);
-opti.set_initial(L14,amp*50);
+opti.set_initial(L1,guess_CurrentLink(1));%65.5
+opti.set_initial(L2,guess_CurrentLink(2));
+opti.set_initial(L3,guess_CurrentLink(3));
+opti.set_initial(L4,guess_CurrentLink(4));
+opti.set_initial(L11,guess_CurrentLink(11));
+opti.set_initial(L12,guess_CurrentLink(12));
+opti.set_initial(L13,guess_CurrentLink(13));
+opti.set_initial(L14,guess_CurrentLink(14));
 
 
 
 %% link length constraints (all positive and not too long)
 minL = 10; maxL = 100;
-opti.subject_to(35 < L1 < maxL); opti.subject_to(minL < L2 < maxL); opti.subject_to(minL < L3 < maxL);
+opti.subject_to(20 < L1 < maxL); opti.subject_to(minL < L2 < maxL); opti.subject_to(minL < L3 < maxL);
 opti.subject_to(minL < L4 < maxL); opti.subject_to(minL < L11 < maxL); opti.subject_to(minL < L12 < maxL);
-opti.subject_to(minL < L13 < maxL); opti.subject_to(minL < L14 < maxL);
+opti.subject_to(minL < L13 < maxL); opti.subject_to(20 < L14 < maxL);
 
 %opti.set_initial(sol_save.value_variables());
 
-opti.solver('ipopt');
-sol = opti.solve();
-%try
 
-%catch
-%    disp('Error')
-%end
-
-% sol.value(width_min)
-% 
-% sol.value(width_max)
-% 
-% opti.set_initial(opti.debug.value_variables());
-% 
-% opti.solver('ipopt');
-% sol = opti.solve();
-
-CurrentLinks_sol = [sol.value(L1) sol.value(L2) sol.value(L3) sol.value(L4) sol.value(L5) sol.value(L6)...
-    sol.value(L7) sol.value(L8) sol.value(L9) sol.value(L10) sol.value(L11) sol.value(L12) sol.value(L13)...
-    sol.value(L14) sol.value(L15)]';
-
-for k=1:width_sample
-    figure
-    PointM_sol = sol.value(PointM(:,k));
-    PointN_sol = sol.value(PointN(:,k));
-    [Theta_sol, JointCoord_sol] = InverseKinematicsGripper2D(L_act, sol.value(L0), CurrentLinks_sol, PointM_sol, PointN_sol);
-    
-    DrawingGripper(JointCoord_sol,[10,0])
-    axis square;
-    axis equal;
+eval_sol = true;
+try
+    p_opts = struct('expand',true);
+    s_opts = struct('max_iter',500);
+    opti.solver('ipopt',p_opts,s_opts);
+    sol = opti.solve();
+catch
+    eval_sol = false;
 end
 
-sol.value(width_min)
+if (eval_sol)
+    CurrentLinks_sol = [sol.value(L1) sol.value(L2) sol.value(L3) sol.value(L4) sol.value(L5) sol.value(L6)...
+        sol.value(L7) sol.value(L8) sol.value(L9) sol.value(L10) sol.value(L11) sol.value(L12) sol.value(L13)...
+        sol.value(L14) sol.value(L15)]';
+    
+    width_sol = sol.value(width);
+    CDF_sol = sol.value(CDF);
+    
+    PointM_sol = sol.value(PointM(:,:));
+    PointN_sol = sol.value(PointN(:,:));
+    
+else
+    % debug info
+    CurrentLinks_sol = [opti.debug.value(L1) opti.debug.value(L2) opti.debug.value(L3) opti.debug.value(L4) opti.debug.value(L5) opti.debug.value(L6)...
+        opti.debug.value(L7) opti.debug.value(L8) opti.debug.value(L9) opti.debug.value(L10) opti.debug.value(L11) opti.debug.value(L12) opti.debug.value(L13)...
+        opti.debug.value(L14) opti.debug.value(L15)]';
+    
+    width_sol = opti.debug.value(width);
+    CDF_sol = opti.debug.value(CDF);
+    
+    PointM_sol = opti.debug.value(PointM(:,:));
+    PointN_sol = opti.debug.value(PointN(:,:));
+    
+end
 
-sol.value(width_max)
+
+
+end
