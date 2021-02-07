@@ -124,44 +124,43 @@ F_QD = F_act/cos(theta16);
 % F_CD*sin(theta4 + pi) + F_DE*sin(theta5 - pi) - F_QD*sin(theta16) = 0
 % Sum Forces X: 
 % F_CD*cos(theta4 + pi) + F_DE*cos(theta5 - pi) - F_QD*cos(theta16) = 0
-EE_D = [sin(theta4 + pi)    sin(theta5 - pi)    F_QD*sin(theta16);
-        cos(theta4 + pi)    cos(theta5 - pi)    F_QD*cos(theta16)];
 
-EE_D_r = rref(EE_D);
-
-F_CD = EE_D_r(1,3);
-F_DE = EE_D_r(2,3);
+F_DE = F_QD/(cos(theta5 - pi) - (sin(theta5 - pi)*cos(theta4 + pi))/(sin(theta4 + pi)));
+F_CD = -F_DE*sin(theta5 - pi)/(sin(theta4 + pi));
 
 
 Check1 = [F_CD*sin(theta4 + pi) + F_DE*sin(theta5 - pi) - F_QD*sin(theta16);
           F_CD*cos(theta4 + pi) + F_DE*cos(theta5 - pi) - F_QD*cos(theta16)];
 
+a1 = (-sin(theta11-theta12)*(L14+ L12));
+b1 = (cos(theta3)*abs(M_y - C_y) + sin(theta6)*abs(M_x - C_x));
+c1 = (-F_CD*sin(pi+ theta4-theta12)*L14);
+d1 = cos(theta11);
+e1 = cos(theta3);   
+f1 = (-F_CD*cos(theta4));
 
-EE_1 = [(-sin(theta11-theta12)*(L14+ L12)) (cos(theta3)*abs(M_y - C_y) + sin(theta6)*abs(M_x - C_x))  0  (-F_CD*sin(pi+ theta4-theta12)*L14);...
-        cos(theta11)      cos(theta3)   0    (-F_CD*cos(theta4));...
-        sin(theta11)      sin(theta3)   1     -F_CD*sin(theta4)];     
+F_BC = (c1 - (f1/d1)*a1)/(b1 - (e1/d1)*a1);
+F_IH = (f1 - F_BC*e1)/d1;
 
-EE_1_r = rref(EE_1)
-
-F_IH = EE_1_r(1,4);
-
-F_BC = EE_1_r(2,4);
-
-F_My = EE_1_r(3,4);
+F_My = -F_CD*sin(theta4) - F_IH*sin(theta11) - F_BC*sin(theta3);
     
 F_M = [0; F_My];
 
 Check2 = [F_IH*(-sin(theta11-theta12)*(L14+ L12)) + F_BC*cos(theta3)*abs(M_y - C_y) + F_BC*sin(theta6)*abs(M_x - C_x) + 0  - (-F_CD*sin(pi+ theta4-theta12)*L14); 
           F_IH*cos(theta11) + F_BC*cos(theta3) + 0 + (F_CD*cos(theta4));
-          F_IH*sin(theta11) + F_BC*sin(theta3) + F_My +  F_CD*sin(theta4)]
+          F_IH*sin(theta11) + F_BC*sin(theta3) + F_My +  F_CD*sin(theta4)];
 
-EE_2 = [sin(theta9 - theta8)*(L9 + L15)    -(sin(theta6)*abs(N_x - E_x) + cos(theta6)*abs(N_y - E_y)) 0  F_DE*L15*sin(theta5 - theta9);...
-        cos(theta8)      cos(theta6)   0 -F_DE*cos(theta5);...
-        sin(theta8)      sin(theta6)   1 -F_DE*sin(theta5)];
-   
-EE_2_r =  rref(EE_2);
+a2 = sin(theta9 - theta8)*(L9 + L15);
+b2 = -(sin(theta6)*abs(N_x - E_x) + cos(theta6)*abs(N_y - E_y));
+c2 = F_DE*L15*sin(theta5 - theta9);
+d2 = cos(theta8);    
+e2 = cos(theta6);    
+f2 = -F_DE*cos(theta5);
 
-F_Ny = EE_2_r(3,4);
+F_EF = (c2 - (f2/d2)*a2)/(b2 - (e2/d2)*a2);      
+F_JK = (f2 - F_EF*e2)/d2;
+
+F_Ny = -F_JK*sin(theta8) -F_EF*sin(theta6) - F_DE*sin(theta5);
 
 F_N = [0; F_Ny];
 Check = [Check1];  
