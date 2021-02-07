@@ -94,7 +94,7 @@ theta6 = Theta(4);  theta8 = Theta(5);  theta9 = Theta(6);
 theta10 = Theta(7); theta11 = Theta(8); theta12 = Theta(9);
 theta13 = Theta(10); theta14 = Theta(11); theta15 = Theta(12);
 
-theta16 = Theta(13);
+theta16 = 0;
 
 %% Unpacking the Joint Coordinates
 A_x = JointCoord(1,1);    B_x = JointCoord(1,2);    C_x = JointCoord(1,3);
@@ -137,15 +137,23 @@ Check1 = [F_CD*sin(theta4 + pi) + F_DE*sin(theta5 - pi) - F_QD*sin(theta16);
           F_CD*cos(theta4 + pi) + F_DE*cos(theta5 - pi) - F_QD*cos(theta16)];
 
 
-EE_1 = [(-sin(theta11-theta12)*(L14+ L12)) cos(theta3)*abs(M_y - C_y) + sin(theta6)*abs(M_x - C_x)  0  (-F_CD*sin(pi+ theta4-theta12)*L14);...
+EE_1 = [(-sin(theta11-theta12)*(L14+ L12)) (cos(theta3)*abs(M_y - C_y) + sin(theta6)*abs(M_x - C_x))  0  (-F_CD*sin(pi+ theta4-theta12)*L14);...
         cos(theta11)      cos(theta3)   0    (-F_CD*cos(theta4));...
-        sin(theta11)      sin(theta3)   1     -F_CD*sin(theta4)];      
+        sin(theta11)      sin(theta3)   1     -F_CD*sin(theta4)];     
 
-EE_1_r = rref(EE_1);
+EE_1_r = rref(EE_1)
+
+F_IH = EE_1_r(1,4);
+
+F_BC = EE_1_r(2,4);
 
 F_My = EE_1_r(3,4);
     
 F_M = [0; F_My];
+
+Check2 = [F_IH*(-sin(theta11-theta12)*(L14+ L12)) + F_BC*cos(theta3)*abs(M_y - C_y) + F_BC*sin(theta6)*abs(M_x - C_x) + 0  - (-F_CD*sin(pi+ theta4-theta12)*L14); 
+          F_IH*cos(theta11) + F_BC*cos(theta3) + 0 + (F_CD*cos(theta4));
+          F_IH*sin(theta11) + F_BC*sin(theta3) + F_My +  F_CD*sin(theta4)]
 
 EE_2 = [sin(theta9 - theta8)*(L9 + L15)    -(sin(theta6)*abs(N_x - E_x) + cos(theta6)*abs(N_y - E_y)) 0  F_DE*L15*sin(theta5 - theta9);...
         cos(theta8)      cos(theta6)   0 -F_DE*cos(theta5);...
