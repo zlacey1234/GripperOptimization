@@ -70,7 +70,7 @@ for k = 1 : width_sample
     PointD(:,k) = JointCoord_temp(:,4);
     
     %reaction force
-    [F_M, F_N] = StaticEquilibrium(F_actuator_total, Actuator_joint_num, CurrentLinks, Theta_temp);
+    [F_M, F_N] = StaticEquilibrium_Gripper2(F_actuator_total, Actuator_joint_num, CurrentLinks, Theta_temp, JointCoord_temp);
     %weight calculation
     
     w(k) = weightSF((F_M(2)-F_N(2)),min_ratio,min_sf,peak,alpha);
