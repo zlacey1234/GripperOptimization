@@ -89,8 +89,10 @@ L5 = CurrentLinks(5);     L6 = CurrentLinks(6);     L7 = CurrentLinks(7);     L8
 L9 = CurrentLinks(9);    L10 = CurrentLinks(10);   L11 = CurrentLinks(11);   L12 = CurrentLinks(12);
 L13 = CurrentLinks(13);  L14 = CurrentLinks(14);   L15 = CurrentLinks(15);
 
-theta3 = Theta(1);  theta4 = Theta(2);  theta5 = Theta(3);
-theta6 = Theta(4);  theta8 = Theta(5);  theta9 = Theta(6);   
+theta3 = Theta(1)  
+theta4 = Theta(2);  theta5 = Theta(3);
+theta6 = Theta(4)  
+theta8 = Theta(5);  theta9 = Theta(6);   
 theta10 = Theta(7); theta11 = Theta(8); theta12 = Theta(9);
 theta13 = Theta(10); theta14 = Theta(11); theta15 = Theta(12);
 
@@ -133,7 +135,7 @@ Check1 = [F_CD*sin(theta4 + pi) + F_DE*sin(theta5 - pi) - F_QD*sin(theta16);
           F_CD*cos(theta4 + pi) + F_DE*cos(theta5 - pi) - F_QD*cos(theta16)];
 
 a1 = (-sin(theta11-theta12)*(L14+ L12));
-b1 = (cos(theta3)*abs(M_y - C_y) + sin(theta6)*abs(M_x - C_x));
+b1 = (cos(theta3)*(M_y - C_y) - sin(theta3)*(M_x - C_x));
 c1 = (-F_CD*sin(pi+ theta4-theta12)*L14);
 d1 = cos(theta11);
 e1 = cos(theta3);   
@@ -146,12 +148,12 @@ F_My = -F_CD*sin(theta4) - F_IH*sin(theta11) - F_BC*sin(theta3);
     
 F_M = [0; F_My];
 
-Check2 = [F_IH*(-sin(theta11-theta12)*(L14+ L12)) + F_BC*cos(theta3)*abs(M_y - C_y) + F_BC*sin(theta6)*abs(M_x - C_x) + 0  - (-F_CD*sin(pi+ theta4-theta12)*L14); 
+Check2 = [F_IH*(-sin(theta11-theta12)*(L14+ L12)) + F_BC*cos(theta3)*(M_y - C_y) - F_BC*sin(theta3)*(M_x - C_x) + 0  - (-F_CD*sin(pi+ theta4-theta12)*L14); 
           F_IH*cos(theta11) + F_BC*cos(theta3) + 0 + (F_CD*cos(theta4));
           F_IH*sin(theta11) + F_BC*sin(theta3) + F_My +  F_CD*sin(theta4)];
 
 a2 = sin(theta9 - theta8)*(L9 + L15);
-b2 = -(sin(theta6)*abs(N_x - E_x) + cos(theta6)*abs(N_y - E_y));
+b2 = -(sin(theta6)*(N_x - E_x) - cos(theta6)*(N_y - E_y));
 c2 = F_DE*L15*sin(theta5 - theta9);
 d2 = cos(theta8);    
 e2 = cos(theta6);    
