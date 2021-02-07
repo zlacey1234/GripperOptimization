@@ -1,4 +1,4 @@
-function [CurrentLinks_sol,width_sol,CDF_sol,PointM_sol,PointN_sol,eval_sol] = WAC_func(L0,offset,min_ratio,width_sample,pdf_sample,guess_CurrentLink,guess_PointM_x,guess_PointN_x,limit_MN)
+function [CurrentLinks_sol,width_sol,CDF_sol,PointM_sol,PointN_sol,eval_sol] = WAC_func(L0,offset,min_ratio,width_sample,pdf_sample,guess_CurrentLink,guess_PointM_x,guess_PointN_x,limit_MN,act_range)
 
 import casadi.*
 opti = casadi.Opti();
@@ -53,6 +53,7 @@ opti.subject_to(0<PointN(1,:) < limit_MN);
 %% For loop variables
 w = opti.variable(1,width_sample);
 rho_sum = opti.variable(1,width_sample);
+PointD = opti.variable(2,width_sample);
 
 %% calculate rho and weight
 for k = 1 : width_sample
@@ -66,7 +67,7 @@ for k = 1 : width_sample
     %opti.subject_to(-pi/2 < Theta_temp(10) < pi/2);
     %loop constraint (D_upper == D_lower)
     opti.subject_to(JointCoord_temp(1:2,15)-0.1 <= JointCoord_temp(1:2,4) <= JointCoord_temp(1:2,15)+0.1);
-    
+    PointD(:,k) = JointCoord_temp(:,4);
     
     %reaction force
     [F_M, F_N] = StaticEquilibrium(F_actuator_total, Actuator_joint_num, CurrentLinks, Theta_temp);
@@ -99,6 +100,9 @@ for k = 1 : width_sample
     end
     
 end
+
+%Point D range constraint
+opti.subject_to(PointD(1,end)-PointD(1,1)<act_range);
 
 
 %% calculate CDF
