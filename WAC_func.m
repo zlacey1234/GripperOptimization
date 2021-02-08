@@ -9,7 +9,7 @@ L_act = 0;
 L1 = opti.variable();   L2 = opti.variable();   L3 = opti.variable();
 L4 = opti.variable();   L11 = opti.variable();  L12 = opti.variable();
 L13 = opti.variable();  L14 = opti.variable();
-
+%L0 = opti.variable();
 
 L5 = L4;    L6 = L3;    L7 = L2;
 L10 = L13;  L9 = L12;   L8 = L11;
@@ -54,6 +54,7 @@ opti.subject_to(0<PointN(1,:) < limit_MN);
 w = opti.variable(1,width_sample);
 rho_sum = opti.variable(1,width_sample);
 PointD = opti.variable(2,width_sample);
+%th13 = opti.variable(1,width_sample);
 
 %% calculate rho and weight
 for k = 1 : width_sample
@@ -62,12 +63,14 @@ for k = 1 : width_sample
     [Theta_temp, JointCoord_temp] = InverseKinematicsGripper2D(L_act, L0, CurrentLinks, PointM(:,k), PointN(:,k));
     %theta angle constraints (avoid singularity)
     opti.subject_to(-pi/4 < Theta_temp(1) < pi/4); opti.subject_to(pi/2 < Theta_temp(3));
-    %opti.subject_to(pi/8 < Theta_temp(8) < 3*pi/4);
+%    opti.subject_to(pi/8 < Theta_temp(8) < 3*pi/4);
     %opti.subject_to(-pi/2 < Theta_temp(6) < pi/2);
-    %opti.subject_to(-pi/2 < Theta_temp(10) < pi/2);
+  %  opti.subject_to(-pi/8 < Theta_temp(10) < pi/8);
     %loop constraint (D_upper == D_lower)
     opti.subject_to(JointCoord_temp(1:2,15)-0.1 <= JointCoord_temp(1:2,4) <= JointCoord_temp(1:2,15)+0.1);
     PointD(:,k) = JointCoord_temp(:,4);
+    %th13(k) = Theta_temp(10); %theta 11
+    
     
     %reaction force
     [F_M, F_N] = StaticEquilibrium_Gripper2(F_actuator_total, Actuator_joint_num, CurrentLinks, Theta_temp, JointCoord_temp);
@@ -95,14 +98,14 @@ for k = 1 : width_sample
         rho_sum(k) = sum(rho_sum_temp);
         
     else
-        rho_sum(k) = sum(rho_sum_temp(pdf_sample_x*pdf_sample_y-pdf_sample_y+1:end));
-        rho_sum(k-1) = rho_sum(k-1) - sum(rho_sum_temp(pdf_sample_x*pdf_sample_y-pdf_sample_y+1:end));
+        %rho_sum(k) = sum(rho_sum_temp(pdf_sample_x*pdf_sample_y-pdf_sample_y+1:end));
+        %rho_sum(k-1) = rho_sum(k-1) - sum(rho_sum_temp(pdf_sample_x*pdf_sample_y-pdf_sample_y+1:end));
     end
     
 end
 
 %Point D range constraint
-opti.subject_to(PointD(1,end)-PointD(1,1)<act_range);
+%opti.subject_to(PointD(1,end)-PointD(1,1)<act_range);
 
 
 %% calculate CDF
@@ -111,6 +114,7 @@ opti.minimize(1-CDF);
 
 %% initial guess for linksh
 %amplification
+%opti.set_initial(L0,20);%65.5
 opti.set_initial(L1,guess_CurrentLink(1));%65.5
 opti.set_initial(L2,guess_CurrentLink(2));
 opti.set_initial(L3,guess_CurrentLink(3));
@@ -124,6 +128,7 @@ opti.set_initial(L14,guess_CurrentLink(14));
 
 %% link length constraints (all positive and not too long)
 minL = 10; maxL = 100;
+%opti.subject_to(minL < L0 < maxL);
 opti.subject_to(20 < L1 < maxL); opti.subject_to(minL < L2 < maxL); opti.subject_to(minL < L3 < maxL);
 opti.subject_to(minL < L4 < maxL); opti.subject_to(minL < L11 < maxL); opti.subject_to(minL < L12 < maxL);
 opti.subject_to(minL < L13 < maxL); opti.subject_to(20 < L14 < maxL);
@@ -134,7 +139,7 @@ opti.subject_to(minL < L13 < maxL); opti.subject_to(20 < L14 < maxL);
 eval_sol = true;
 try
     p_opts = struct('expand',true);
-    s_opts = struct('max_iter',500);
+    s_opts = struct('max_iter',3000);
     opti.solver('ipopt',p_opts,s_opts);
     sol = opti.solve();
 catch

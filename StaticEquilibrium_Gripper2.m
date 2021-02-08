@@ -89,9 +89,9 @@ L5 = CurrentLinks(5);     L6 = CurrentLinks(6);     L7 = CurrentLinks(7);     L8
 L9 = CurrentLinks(9);    L10 = CurrentLinks(10);   L11 = CurrentLinks(11);   L12 = CurrentLinks(12);
 L13 = CurrentLinks(13);  L14 = CurrentLinks(14);   L15 = CurrentLinks(15);
 
-theta3 = Theta(1)  
+theta3 = Theta(1);  
 theta4 = Theta(2);  theta5 = Theta(3);
-theta6 = Theta(4)  
+theta6 = Theta(4); 
 theta8 = Theta(5);  theta9 = Theta(6);   
 theta10 = Theta(7); theta11 = Theta(8); theta12 = Theta(9);
 theta13 = Theta(10); theta14 = Theta(11); theta15 = Theta(12);

@@ -44,7 +44,7 @@ for k=1:100
             [Theta_temp, JointCoord_temp] = InverseKinematicsGripper2D(L_act, L0, CurrentLinks, PointM(:,k1), PointN(:,k1));
             %theta angle constraints (avoid singularity)
             opti.subject_to(-pi/4 < Theta_temp(1) < pi/4); opti.subject_to(pi/2 < Theta_temp(3));
-            opti.subject_to(pi/8 < Theta_temp(8) < 3*pi/4);
+            %opti.subject_to(pi/8 < Theta_temp(8) < 3*pi/4); %theta 11
             %opti.subject_to(-pi/2 < Theta_temp(6) < pi/2);
             %opti.subject_to(-pi/2 < Theta_temp(10) < pi/2);
             %loop constraint (D_upper == D_lower)

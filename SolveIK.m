@@ -10,18 +10,18 @@ opti = casadi.Opti();
 
 %% Create the Gripper (Initially at Home Position)
 L_act = 0;     
-L0 = 0;     
+L0 = 10;     
 
-L1 = 65.5;   L2 = 80;   L3 = 80;   
-L4 = 80;   L11 = 200;  L12 = 130;    
-L13 = 100;  L14 = 50;
+L1 = 20;   L2 = 40.74;   L3 = 53.38;   
+L4 = 72.8;   L11 = 76.714;  L12 = 57.76;    
+L13 = 10;  L14 = 10;
 
 
 L5 = L4;    L6 = L3;    L7 = L2;
 L10 = L13;  L9 = L12;   L8 = L11;
 L15 = L14;
 
-CurrentLinks = 0.5*[L1 L2 L3 L4 L5 L6 L7 L8 L9 L10 L11 L12 L13 L14 L15]';
+CurrentLinks = [L1 L2 L3 L4 L5 L6 L7 L8 L9 L10 L11 L12 L13 L14 L15]';
 
 
 PointM = opti.variable(1,2);
@@ -33,15 +33,15 @@ opti.subject_to(0<PointN(1));
 
 
 % cube object y=+/-12
-rock_y=60;
+rock_y=30;
     
-offset = 15;
+offset = 14;
 
 opti.subject_to(PointM(2)==rock_y+offset);
 opti.subject_to(PointN(2)==-rock_y+offset);
     % init 
-opti.set_initial(PointM,[100,rock_y+offset]);
-opti.set_initial(PointN,[75,-rock_y+offset]);
+opti.set_initial(PointM,[80,rock_y+offset]);
+opti.set_initial(PointN,[70,-rock_y+offset]);
 
 [Theta, JointCoord] = InverseKinematicsGripper2D(L_act, L0, CurrentLinks, PointM, PointN);
 %% looc constraint
