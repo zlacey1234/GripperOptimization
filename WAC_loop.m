@@ -3,17 +3,18 @@ clear all;
 clc;
 
 N_guess = 3;
-N_amp =20;
-L0 = 10; offset=12; min_ratio=0.5; width_sample=5; pdf_sample=[10,5];
+N_amp =10;
+L0 = 10; offset=12; min_ratio=0.5; width_sample=5; pdf_sample=[10,10];
 
 guess_CurrentLink = [65.5,80,80,80,0,0,0,0,0,0,140,120,100,50]';
 guess_CurrentLink = [guess_CurrentLink, [42,42,42,42,0,0,0,0,0,0,68,56,49,14]'];
-guess_CurrentLink = [guess_CurrentLink, [20,40.74,53.38,72.80,0,0,0,0,0,0,76.71,57.76,10,10]'];
-guess_PointM_x = [123 133.5; 123 133.5; 132 113];
-guess_PointN_x = [132 113; 132 113;132 113 ];
+guess_CurrentLink = [guess_CurrentLink, [20,40.75,25.5,48.34,0,0,0,0,0,0,50.86,10,20,20]'];
+
+guess_PointM_x = [133.5 133.5; 133.5 133.5; 70 57.13];
+guess_PointN_x = [113 113; 113 113;42 61];
 limit_MN = 80;
 act_range = 30;
-amp = linspace(0.1,2,N_amp);
+amp = linspace(0.05,2,N_amp);
 CLs_sol=[];wd_sol=[];C_sol=[];k_sol=[];
 
 for k1 = 1:N_guess

@@ -98,14 +98,14 @@ for k = 1 : width_sample
         rho_sum(k) = sum(rho_sum_temp);
         
     else
-        %rho_sum(k) = sum(rho_sum_temp(pdf_sample_x*pdf_sample_y-pdf_sample_y+1:end));
-        %rho_sum(k-1) = rho_sum(k-1) - sum(rho_sum_temp(pdf_sample_x*pdf_sample_y-pdf_sample_y+1:end));
+        rho_sum(k) = sum(rho_sum_temp(pdf_sample_x*pdf_sample_y-pdf_sample_y+1:end));
+        rho_sum(k-1) = rho_sum(k-1) - sum(rho_sum_temp(pdf_sample_x*pdf_sample_y-pdf_sample_y+1:end));
     end
     
 end
 
 %Point D range constraint
-%opti.subject_to(PointD(1,end)-PointD(1,1)<act_range);
+opti.subject_to(PointD(1,end)-PointD(1,1)<act_range);
 
 
 %% calculate CDF
@@ -129,7 +129,7 @@ opti.set_initial(L14,guess_CurrentLink(14));
 %% link length constraints (all positive and not too long)
 minL = 10; maxL = 100;
 %opti.subject_to(minL < L0 < maxL);
-opti.subject_to(20 < L1 < maxL); opti.subject_to(minL < L2 < maxL); opti.subject_to(minL < L3 < maxL);
+opti.subject_to(0 < L1 < maxL); opti.subject_to(minL < L2 < maxL); opti.subject_to(minL < L3 < maxL);
 opti.subject_to(minL < L4 < maxL); opti.subject_to(minL < L11 < maxL); opti.subject_to(minL < L12 < maxL);
 opti.subject_to(minL < L13 < maxL); opti.subject_to(20 < L14 < maxL);
 
