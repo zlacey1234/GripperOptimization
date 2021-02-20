@@ -1,5 +1,5 @@
 close all;
-clear all;
+%clear all;
 clc;
 
 %get width and height of the holds
@@ -14,7 +14,9 @@ pdHLN = fitdist(H,'Lognormal');
 
 
 
-x_H = min(H):1:max(H);
+%x_H = min(H):1:max(H);
+
+x_H = 0.1:1:max(H);
 y_H = pdf(pdHLN,x_H);
 
 sigma_H = pdHLN.sigma;
@@ -32,7 +34,10 @@ hold off
 
 
 
-x_W = min(W):1:max(W);
+%x_W = min(W):1:max(W);
+x_W = 0.1:1:max(W);
+
+%y_W = pdf(pdWLN,x_W);
 y_W = pdf(pdWLN,x_W);
 
 sigma_W = pdWLN.sigma;
@@ -100,3 +105,5 @@ surf(x_H,x_W,LOGNORMAL)
 
 hold on
 %histo = histogram2(A(:,1),A(:,2),'Normalization','pdf')
+%s_point = [15.96 7.48 1.55 3.91 10.0;30.69 61.18 91.68 122 152.6]
+plot3(abs(s_point(1,:)),abs(s_point(2,:)),[0.0002 0.0002 0.0002 0.0002 0.0002 0.0002 0.0002 0.0002 0.0002 0.0002],'*')

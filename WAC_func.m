@@ -131,7 +131,7 @@ minL = 10; maxL = 100;
 %opti.subject_to(minL < L0 < maxL);
 opti.subject_to(0 < L1 < maxL); opti.subject_to(minL < L2 < maxL); opti.subject_to(minL < L3 < maxL);
 opti.subject_to(minL < L4 < maxL); opti.subject_to(minL < L11 < maxL); opti.subject_to(minL < L12 < maxL);
-opti.subject_to(minL < L13 < maxL); opti.subject_to(20 < L14 < maxL);
+opti.subject_to(minL < L13 < maxL); opti.subject_to(10 < L14 < maxL);
 
 %opti.set_initial(sol_save.value_variables());
 
