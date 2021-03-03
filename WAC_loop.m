@@ -18,9 +18,10 @@ amp = linspace(0.05,2,N_amp);
 CLs_sol=[];wd_sol=[];C_sol=[];k_sol=[];M_sol=[];N_sol=[];
 
 for k1 = 1:N_guess
-    for k2=1:N_amp
-        [CurrentLinks_sol,width_sol,CDF_sol,PointM_sol,PointN_sol,eval_sol] = ...
-            WAC_func(L0,offset,min_ratio,width_sample,pdf_sample,amp(k2)*guess_CurrentLink(:,k1),amp(k2)*guess_PointM_x(k1,:),amp(k2)*guess_PointN_x(k1,:),limit_MN,act_range);
+    for k2=3:N_amp
+        for k3=5:N_amp
+        [CurrentLinks_sol,width_sol,CDF_sol,PointM_sol,PointN_sol,CDF_no_w_sol,eval_sol] = ...
+            WAC_func(L0,offset,min_ratio,width_sample,pdf_sample,amp(k2)*guess_CurrentLink(:,k1),amp(k3)*guess_PointM_x(k1,:),amp(k3)*guess_PointN_x(k1,:),limit_MN,act_range);
         
         if(eval_sol)
             CLs_sol = [CLs_sol;CurrentLinks_sol'];
@@ -41,6 +42,7 @@ for k1 = 1:N_guess
                 %axis equal;
             end
             disp('One sol')
+        end
         end
     end
 end

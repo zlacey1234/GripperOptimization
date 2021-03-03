@@ -1,4 +1,4 @@
-function [CurrentLinks_sol,width_sol,CDF_sol,PointM_sol,PointN_sol,eval_sol] = WAC_func(L0,offset,min_ratio,width_sample,pdf_sample,guess_CurrentLink,guess_PointM_x,guess_PointN_x,limit_MN,act_range)
+function [CurrentLinks_sol,width_sol,CDF_sol,PointM_sol,PointN_sol,CDF_no_w_sol,eval_sol] = WAC_func(L0,offset,min_ratio,width_sample,pdf_sample,guess_CurrentLink,guess_PointM_x,guess_PointN_x,limit_MN,act_range)
 
 import casadi.*
 opti = casadi.Opti();
@@ -156,6 +156,7 @@ if (eval_sol)
     
     PointM_sol = sol.value(PointM(:,:));
     PointN_sol = sol.value(PointN(:,:));
+    CDF_no_w_sol = sum(sol.value(rho_sum));
     
 else
     % debug info
@@ -168,7 +169,7 @@ else
     
     PointM_sol = opti.debug.value(PointM(:,:));
     PointN_sol = opti.debug.value(PointN(:,:));
-    
+    CDF_no_w_sol = sum(opti.debug.value(rho_sum));
 end
 
 
