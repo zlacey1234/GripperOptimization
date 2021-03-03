@@ -82,10 +82,11 @@ plot(L_x, L_y, 'k.','MarkerSize', 30)
 plot(M_x, M_y, 'k.','MarkerSize', 30)
 plot(N_x, N_y, 'k.','MarkerSize', 30)
 
-xlabel('X Direction (mm)','FontSize',14,'Interpreter','Latex')
-ylabel('Y Direction (mm)','FontSize',14,'Interpreter','Latex')
-
+xlabel('Height Direction, x, [mm]','FontSize',14,'Interpreter','Latex')
+ylabel('Width Direction, y, [mm]','FontSize',14,'Interpreter','Latex')
+xlim([-60 80])
+ylim([-60 80])
 hold off
-axis equal
+%axis square
 drawnow;
 end

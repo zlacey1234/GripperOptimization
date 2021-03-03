@@ -1,0 +1,1 @@
+data = Boulderingholdlists1S3(:,4:end)

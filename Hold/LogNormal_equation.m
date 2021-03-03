@@ -102,8 +102,14 @@ LOGNORMAL = 1./(2*pi*Y(1,:).*Y(2,:)*SIGMA(1,1)*SIGMA(2,2)*sqrt(1-rho^2)) .*  exp
 
 LOGNORMAL = reshape(LOGNORMAL,length(x_W),length(x_H));
 surf(x_H,x_W,LOGNORMAL)
+colormap( flipud(colormap('gray')));
+shading interp;
+colorbar;
 
 hold on
 %histo = histogram2(A(:,1),A(:,2),'Normalization','pdf')
 %s_point = [15.96 7.48 1.55 3.91 10.0;30.69 61.18 91.68 122 152.6]
-plot3(abs(s_point(1,:)),abs(s_point(2,:)),[0.0002 0.0002 0.0002 0.0002 0.0002 0.0002 0.0002 0.0002 0.0002 0.0002],'*')
+plot3(abs(s_point(1,:)),abs(s_point(2,:)),0.0002*ones(1,length(s_point(1,:))),'*-r')
+xlim([0,max(H)]);
+ylim([0,max(W)])
+legend('Bivariate Log-normal Density Function','Sampled Workspace and Graspable Range')

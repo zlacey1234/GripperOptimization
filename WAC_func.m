@@ -33,7 +33,7 @@ pdf_sample_y = pdf_sample(2);
 height_max = 100;
 
 %% Actuator setting
-min_sf = 1.5; peak = 5; alpha = 1/20;
+min_sf = 1.5; peak = 1; alpha = 1/20;
 
 F_actuator_total = 1; % (Newtons)
 Actuator_joint_num = 2; % We are assuming the pin joints are at the same point for now

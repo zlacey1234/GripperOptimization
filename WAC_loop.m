@@ -17,7 +17,7 @@ act_range = 30;
 amp = linspace(0.05,2,N_amp);
 CLs_sol=[];wd_sol=[];C_sol=[];k_sol=[];M_sol=[];N_sol=[];
 
-for k1 = 2:N_guess
+for k1 = 1:N_guess
     for k2=1:N_amp
         [CurrentLinks_sol,width_sol,CDF_sol,PointM_sol,PointN_sol,eval_sol] = ...
             WAC_func(L0,offset,min_ratio,width_sample,pdf_sample,amp(k2)*guess_CurrentLink(:,k1),amp(k2)*guess_PointM_x(k1,:),amp(k2)*guess_PointN_x(k1,:),limit_MN,act_range);
@@ -35,9 +35,10 @@ for k1 = 2:N_guess
             for kf=1:width_sample
                 figure
                 [Theta_sol, JointCoord_sol] = InverseKinematicsGripper2D(L_act, L0, CurrentLinks_sol, PointM_sol(:,kf), PointN_sol(:,kf));
-                DrawingGripper(JointCoord_sol,[10,0])
-                axis square;
-                axis equal;
+                %DrawingGripper(JointCoord_sol,[10,0])
+                DrawingGripper_Publication(JointCoord_sol);
+                %axis square;
+                %axis equal;
             end
             disp('One sol')
         end
